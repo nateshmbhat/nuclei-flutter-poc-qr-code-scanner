@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
             qrCodeResult == null
                 ? Text(
                     'Please Scan the QR Code',
-                    style: Theme.of(context).textTheme.headline2,
+                    style: Theme.of(context).textTheme.headline4,
                   )
                 : buildQRWidget()
           ],
