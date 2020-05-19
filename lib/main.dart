@@ -29,15 +29,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  ScanResult qrCodeResult ;
+  ScanResult qrCodeResult;
 
   Future<void> scanQrCode() async {
-    qrCodeResult = await BarcodeScanner.scan() ;
+    qrCodeResult = await BarcodeScanner.scan();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -46,17 +46,53 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-
+            qrCodeResult == null
+                ? Text(
+                    'Please Scan the QR Code',
+                    style: Theme.of(context).textTheme.headline2,
+                  )
+                : buildQRWidget()
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        tooltip: 'Increment',
+        tooltip: 'Scan QR Code',
         onPressed: () {
-          scanQrCode() ;
+          scanQrCode();
         },
-        child: Icon(Icons.add),
+        child: Icon(Icons.camera_alt),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  Widget buildQRWidget() {
+    if(qrCodeResult==null) return CircularProgressIndicator() ;
+    return Column(
+      children: [
+        buildQrInfoTile( 'Result Type' , qrCodeResult.type) ,
+        buildQrInfoTile( 'Data from Code', qrCodeResult.rawContent) ,
+        buildQrInfoTile( 'BarCode Format', qrCodeResult.format.toString().toUpperCase()) ,
+        buildQrInfoTile('Format extra Info', qrCodeResult.formatNote) ,
+      ],
+    );
+  }
+
+  Widget buildQrInfoTile(Object key , Object value) {
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Card(
+        elevation: 10,
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Wrap(
+            children: [
+              Text(key.toString() , style: TextStyle(fontWeight: FontWeight.bold),) ,
+              Text('  :  ') ,
+              Text(value.toString())
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
