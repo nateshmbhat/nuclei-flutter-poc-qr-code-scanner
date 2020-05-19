@@ -32,7 +32,11 @@ class _MyHomePageState extends State<MyHomePage> {
   ScanResult qrCodeResult;
 
   Future<void> scanQrCode() async {
-    qrCodeResult = await BarcodeScanner.scan();
+    qrCodeResult = await BarcodeScanner.scan(
+      options: ScanOptions(
+        restrictFormat: [BarcodeFormat.qr],
+      )
+    );
     setState(() {});
   }
 
